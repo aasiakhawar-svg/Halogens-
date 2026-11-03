@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trends in Group 7</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f9fc;--card:#fff;--tx:#1f2430;--mu:#5d6575;--bd:#d9e4ec;--ac:#0a9be0;--ac2:#f58a14;--ok:#1d8a4e;--bad:#d12a2a}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161b;--card:#1a232a;--tx:#edf2f5;--mu:#9aabb6;--bd:#2d3b45;--ac:#4cc3ff;--ac2:#ffa033;--ok:#4cd08a;--bad:#ff6b6b}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+main{max-width:960px;margin:0 auto;padding:14px}
+h1{font-size:1.5rem;margin:.1em 0}h2{font-size:1.2rem;margin:.2em 0}.sub{color:var(--mu);margin:0 0 10px}
+button,input{font:inherit;color:var(--tx)}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+nav button{padding:8px 14px;border:1px solid var(--bd);background:var(--card);border-radius:999px;cursor:pointer}
+nav button.on{background:var(--ac);border-color:var(--ac);color:#06202e;font-weight:700}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+.btn{padding:8px 14px;border:1px solid var(--bd);background:var(--card);border-radius:10px;cursor:pointer}
+.btn.p{background:var(--ac2);color:#1a1000;border-color:var(--ac2);font-weight:700}.btn.on{outline:3px solid var(--ac)}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}@media(max-width:680px){.two{grid-template-columns:1fr}}
+.stage{background:linear-gradient(180deg,#0e1218,#1b2430);border-radius:12px;padding:6px;color:#fff}
+.stage.lt{background:linear-gradient(135deg,rgba(10,155,224,.10),rgba(245,138,20,.10));color:var(--tx)}
+.eq{padding:10px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:10px;overflow-x:auto;white-space:nowrap;margin:8px 0;font-family:ui-monospace,Menlo,monospace;font-size:1.05rem}
+.res{padding:10px 12px;border-radius:10px;border-left:5px solid var(--ok);background:var(--bg);margin-top:8px}.res.no{border-color:var(--bad)}
+.key{padding:10px 12px;border-radius:10px;border-left:5px solid var(--ac2);background:var(--bg);margin:8px 0;font-size:.95rem}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 12px;border:1px solid var(--bd);background:var(--card);border-radius:8px;cursor:pointer}
+.opt.good{border-color:var(--ok);background:rgba(29,138,78,.15)}.opt.bad{border-color:var(--bad);background:rgba(209,42,42,.12)}
+.note{font-size:.9rem;color:var(--mu)}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--bd);padding:6px;text-align:center;font-size:.9rem}th{background:var(--ac2);color:#1a1000}
+svg text{font-family:system-ui;fill:currentColor}
+input[type=range]{width:100%}
+.sh{animation:sh 1.6s ease-in-out infinite alternate}@keyframes sh{from{transform:translateX(0)}to{transform:translateX(var(--s))}}
+.rise{animation:rise 2.4s infinite}@keyframes rise{from{transform:translateY(0);opacity:.9}to{transform:translateY(-90px);opacity:0}}
+.pull{animation:pull var(--d) infinite ease-in}@keyframes pull{from{transform:translateX(0)}to{transform:translateX(-62px)}}
+.pop{animation:pop .6s both;transform-box:fill-box;transform-origin:center}@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+</style></head><body><main>
+<h1>🧪 Trends in Group 7 (the Halogens)</h1>
+<p class="sub">States &amp; temperatures · London forces · changes of state · electronegativity &amp; reactivity</p>
+<nav id="nav"></nav><div id="view"></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);let tab=0;
+const tabs=['1 · The halogens','2 · London forces','3 · Changes of state','4 · EN &amp; reactivity','5 · Practice','6 · Explain it'];
+function nav(){$('#nav').innerHTML=tabs.map((t,i)=>`<button class="${i==tab?'on':''}" onclick="tab=${i};nav();draw()">${t}</button>`).join('')}
+const H=[['Fluorine','F₂',9,'gas',-220,-188,4.0,'#e8e07a',2],['Chlorine','Cl₂',17,'gas',-101,-35,3.0,'#7ad65c',3],['Bromine','Br₂',35,'liquid',-7,59,2.8,'#b5502a',4],['Iodine','I₂',53,'solid',114,184,2.5,'#9b4fd0',5],['Astatine','At₂',85,'solid',302,337,2.2,'#888',6]];
+const stOf=(h,T)=>T<h[4]?'solid':T<h[5]?'liquid':'gas';
+/* T1 */
+let el=2,T=20,simId=0;
+function chart(){const x=t=>40+(t+250)/600*290;let s=`<svg viewBox="0 0 350 190" width="100%"><g style="font-size:10px">${[-200,-100,0,100,200,300].map(t=>`<line x1="${x(t)}" y1="12" x2="${x(t)}" y2="160" stroke="currentColor" opacity=".15"/><text x="${x(t)}" y="174" text-anchor="middle">${t}</text>`).join('')}<text x="190" y="188" text-anchor="middle">temperature / °C</text></g>`;
+ H.forEach((h,i)=>{const y=18+i*28;s+=`<text x="4" y="${y+11}" style="font-size:11px;font-weight:${i==el?700:400}">${h[1]}</text><rect x="${x(-250)}" y="${y}" width="${x(h[4])-x(-250)}" height="16" fill="#8aa" opacity=".5"/><rect x="${x(h[4])}" y="${y}" width="${x(h[5])-x(h[4])}" height="16" fill="${h[7]}"/><rect x="${x(h[5])}" y="${y}" width="${x(350)-x(h[5])}" height="16" fill="#cde" opacity=".35"/>`});
+ s+=`<line x1="${x(20)}" y1="10" x2="${x(20)}" y2="160" stroke="#0a9be0" stroke-width="2" stroke-dasharray="4 3"/><text x="${x(20)}" y="8" text-anchor="middle" style="font-size:9px;fill:#0a9be0">room temp</text><line x1="${x(T)}" y1="12" x2="${x(T)}" y2="160" stroke="#f58a14" stroke-width="3"/></svg><p class="note" style="margin:0">Grey = solid · coloured = liquid range (melting → boiling) · pale = gas</p>`;return s}
+function info(){const h=H[el],s=stOf(h,T);$('#stl').innerHTML=`<b>${h[1]}</b> at <b>${T} °C</b> is a <b style="color:var(--ac2)">${s}</b>`;$('#chart').innerHTML=chart()}
+let P=[],cur='';
+function initP(s){P=[];cur=s;for(let i=0;i<30;i++){const gx=i%6,gy=Math.floor(i/6);P.push(s=='solid'?{bx:50+gx*44,by:40+gy*30,x:0,y:0,vx:0,vy:0,ph:Math.random()*6}:{x:Math.random()*300+10,y:(s=='liquid'?110:10)+Math.random()*(s=='liquid'?80:180),vx:(Math.random()-.5)*(s=='gas'?6:1.6),vy:(Math.random()-.5)*(s=='gas'?6:1.6)})}}
+function sim(id){const cv=document.getElementById('cv');if(!cv||id!=simId)return;const c=cv.getContext('2d'),h=H[el],s=stOf(h,T);if(s!=cur)initP(s);
+ c.clearRect(0,0,320,200);c.fillStyle='#10161c';c.fillRect(0,0,320,200);c.fillStyle=h[7];const t=performance.now()/200;
+ P.forEach(p=>{if(s=='solid'){p.x=p.bx+Math.sin(t+p.ph)*2;p.y=p.by+Math.cos(t*1.1+p.ph)*2}else{p.x+=p.vx;p.y+=p.vy;const t0=s=='liquid'?105:6;if(p.x<8||p.x>312)p.vx*=-1;if(p.y<t0||p.y>192)p.vy*=-1}
+  c.beginPath();c.arc(p.x,p.y,6,0,7);c.arc(p.x+(s=='gas'?9:7),p.y,6,0,7);c.fill()});requestAnimationFrame(()=>sim(id))}
+function t1(){setTimeout(()=>{simId++;initP('');info();sim(simId)},0);
+ return `<div class="card"><h2>Meet the halogens</h2><p>Five elements in Group 7. “Halogen” means <b>salt producer</b> (they form salts called <b>halides</b>). Fluorine (behaves differently) and astatine (only radioactive isotopes) are often ignored. All halogens are <b>diatomic molecules</b>.</p>
+ <div class="row">${H.map((h,i)=>`<button class="btn ${i==el?'on':''}" onclick="el=${i};draw()">${h[0]}</button>`).join('')}</div>
+ <div class="two"><div><canvas id="cv" width="320" height="200" style="width:100%;border-radius:12px"></canvas><p id="stl" style="text-align:center"></p>
+ <label>Temperature: <b>${T} °C</b><input type="range" min="-250" max="350" value="${T}" oninput="T=+this.value;simInfo()"></label><div class="row"><button class="btn" onclick="T=20;draw()">Room temp (20 °C)</button></div></div>
+ <div class="stage lt" id="chart"></div></div>
+ <table style="margin-top:10px"><tr><th>Element</th><th>State</th><th>m.p. /°C</th><th>b.p. /°C</th><th>EN</th></tr>${H.map((h,i)=>`<tr style="${i==el?'background:var(--bg);font-weight:700':''}"><td>${h[0]}</td><td>${h[3]}</td><td>${h[4]}</td><td>${h[5]}</td><td>${h[6]}</td></tr>`).join('')}</table>
+ <div class="key">Trend: melting and boiling temperatures <b>increase</b> down the group, so the state goes gas → liquid → solid. The next scene explains why.</div></div>`}
+function simInfo(){info();document.querySelector('input[type=range]').previousSibling.textContent='Temperature: ';document.querySelector('label b').textContent=T+' °C'}
+/* T2 */
+let s2=0,e2=1;
+function t2(){const sh=s2>=1,ind=s2>=2,h=H[e2],e=h[2]*2,r=14+e/7;
+ const mol=(x,shift,lab,sz)=>`<rect x="${x}" y="40" width="130" height="70" rx="14" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="${x+65+(shift?18:0)}" cy="75" rx="${sz}" ry="${sz*.6}" fill="#0a9be0" opacity=".25"/><circle cx="${x+30}" cy="75" r="6" fill="currentColor"/><circle cx="${x+100}" cy="75" r="6" fill="currentColor"/>${lab?`<text x="${x+30}" y="28" text-anchor="middle" style="font-size:15px">δ+</text><text x="${x+100}" y="28" text-anchor="middle" style="font-size:15px">δ−</text>`:''}`;
+ const a=`<svg viewBox="0 0 330 140" width="100%"><g style="color:#fff">${mol(10,sh,sh,34)}${mol(185,ind,ind,34)}${ind?'<path class="pop" d="M142 75 H182" stroke="#ff9a2e" stroke-width="4" marker-end="url(#a)"/><text x="162" y="64" text-anchor="middle" style="font-size:11px;fill:#ffb54d">attract</text>':''}</g><text x="165" y="132" text-anchor="middle" style="font-size:12px;fill:#aab">${['two non-polar molecules: no interaction expected','electrons shift: an instantaneous dipole','it induces a dipole in its neighbour → attraction'][s2]}</text></svg>`;
+ const sz=`<svg viewBox="0 0 160 130" width="100%" style="max-width:220px"><rect x="10" y="20" width="140" height="90" rx="16" fill="none" stroke="currentColor" stroke-width="3"/><ellipse class="sh" style="--s:10px" cx="75" cy="65" rx="${r*1.6}" ry="${r}" fill="${h[7]}" opacity=".6"/><circle cx="45" cy="65" r="5" fill="currentColor"/><circle cx="105" cy="65" r="5" fill="currentColor"/></svg>`;
+ const str=[1,2,3.5,5,7][e2];
+ return `<div class="card"><h2>Why do boiling points rise? London forces</h2><p>Halogen molecules are non-polar on average, but their electron density <b>fluctuates</b>, so the centres of + and − charge sometimes don’t coincide: an <b>instantaneous dipole</b>. It <b>induces</b> a dipole in a neighbour, and the molecules attract.</p>
+ <div class="stage">${a}</div><div class="row"><button class="btn ${s2==0?'on':''}" onclick="s2=0;draw()">①</button><button class="btn ${s2==1?'on':''}" onclick="s2=1;draw()">②</button><button class="btn p" onclick="s2=Math.min(2,s2+1);draw()">Next ▶</button></div></div>
+ <div class="card"><h2>Bigger electron cloud → stronger forces</h2><div class="row">${H.map((x,i)=>`<button class="btn ${i==e2?'on':''}" onclick="e2=${i};draw()">${x[1]}</button>`).join('')}</div>
+ <div class="two"><div class="stage lt">${sz}<p style="text-align:center" class="note">${h[1]}: ${e} electrons in the molecule</p></div>
+ <div><p><b>London forces:</b></p><div style="background:var(--bd);border-radius:8px;height:20px"><div style="width:${str/7*100}%;height:100%;border-radius:8px;background:linear-gradient(90deg,#4cc3ff,#f58a14)"></div></div>
+ <p>m.p. <b>${h[4]} °C</b> · b.p. <b>${h[5]} °C</b> · ${h[3]}</p></div></div>
+ <div class="key">More electrons → larger electron cloud → stronger instantaneous dipole–induced dipole forces → more energy to separate molecules → higher melting and boiling temperatures.</div>
+ <div class="key"><b>Learning tip:</b> permanent dipoles (polar molecules) are always there; temporary (instantaneous) dipoles come and go but are present in every molecule.</div></div>`}
+/* T3 */
+let ch=0,warm=false;
+function t3(){const br=ch==0,col=br?'#a8401e':'#8a3fc0';
+ let v=`<svg viewBox="0 0 260 220" width="100%" style="max-width:300px;display:block;margin:auto"><g style="color:#dde"><path d="M100 30 V90 L60 190 a10 10 0 0 0 10 14 H190 a10 10 0 0 0 10 -14 L160 90 V30" fill="none" stroke="currentColor" stroke-width="3"/></g>
+ ${br?`<path d="M72 170 L190 170 L196 192 a8 8 0 0 1 -8 10 H72 a8 8 0 0 1 -8 -10z" fill="${col}"/>`:[0,1,2,3,4,5].map(i=>`<polygon points="${80+i*20},200 ${86+i*20},182 ${94+i*20},200" fill="${col}"/>`).join('')}
+ ${warm?[0,1,2,3,4].map(i=>`<circle class="rise" cx="${105+i*16}" cy="${br?160:178}" r="${7+i%2*3}" fill="${col}" opacity=".7" style="animation-delay:${i*.45}s"/>`).join('')+'<text x="130" y="216" text-anchor="middle" style="font-size:12px">🔥 warm</text>':''}</svg>`;
+ return `<div class="card"><h2>Equations for changes of state</h2><p>Physical changes can have equations too. Use the <b>formula</b> of the halogen (Br₂, not Br) and the correct state symbols.</p>
+ <div class="row"><button class="btn ${br?'on':''}" onclick="ch=0;warm=false;draw()">Bromine</button><button class="btn ${!br?'on':''}" onclick="ch=1;warm=false;draw()">Iodine</button><button class="btn p" onclick="warm=!warm;draw()">${warm?'Cool':'Warm it'}</button></div>
+ <div class="two"><div class="stage">${v}</div><div>${br?`<p>Bromine is a <b>liquid</b>, but its boiling point (59 °C) is not much above room temperature, so it gives off <b>brown vapour</b>.</p><div class="eq">Br₂(l) → Br₂(g)</div>`:`<p>When iodine is warmed, most of it changes <b>directly into vapour without melting</b>. This is <b>sublimation</b>.</p><div class="eq">I₂(s) → I₂(g)</div><div class="res"><b>sublimation:</b> a solid changing directly into a vapour without melting.</div>`}
+ ${warm?`<div class="res">${br?'Liquid → gas (evaporating/boiling).':'Solid → gas (sublimation) – a purple vapour.'}</div>`:''}</div></div></div>`}
+/* T4 */
+let e4=1;
+function t4(){const h=H[e4],n=h[8];let a=`<svg viewBox="0 0 300 190" width="100%"><circle cx="110" cy="95" r="12" fill="#e0b040"/><text x="110" y="99" text-anchor="middle" style="font-size:9px;fill:#222;font-weight:700">${h[2]}+</text>`;
+ for(let i=1;i<=n;i++)a+=`<circle cx="110" cy="95" r="${12+i*12}" fill="none" stroke="#5b6b78" stroke-dasharray="3 4"/>`;
+ const R=12+n*12;a+=`<circle class="pull" style="--d:${(2.4/h[6]*1.6).toFixed(2)}s" cx="${110+R+62}" cy="95" r="6" fill="#6fa8ff"/><text x="${110+R+62}" y="80" text-anchor="middle" style="font-size:10px">e⁻</text><text x="150" y="185" text-anchor="middle" style="font-size:11px;fill:#aab">${n} energy levels · pull speed ∝ electronegativity</text></svg>`;
+ return `<div class="card"><h2>Electronegativity &amp; reactivity</h2><p><b>Electronegativity</b> = ability of an atom to attract the bonding pair of electrons (Pauling scale 0–4). Group 7 has the highest of any group; fluorine is the highest of all elements.</p>
+ <div class="row">${H.map((x,i)=>`<button class="btn ${i==e4?'on':''}" onclick="e4=${i};draw()">${x[0]}</button>`).join('')}</div>
+ <div class="two"><div class="stage">${a}</div><div><p>Electronegativity <b style="font-size:1.3rem">${h[6]}</b></p><div style="background:var(--bd);border-radius:8px;height:18px"><div style="width:${h[6]/4*100}%;height:100%;border-radius:8px;background:linear-gradient(90deg,#4cc3ff,#f58a14)"></div></div>
+ <p>Reactivity: <b>${['highest','high','medium','lower','lowest (radioactive)'][e4]}</b></p>
+ <ul><li>Nuclear charge: ${h[2]}+ (bigger → higher EN)</li><li>Energy levels: <b>${n}</b> (more → bonding pair further away and more shielding → lower EN)</li></ul></div></div>
+ <div class="key"><b>Down the group:</b> nuclear charge increases, but the extra energy levels mean a longer distance and more shielding, so electronegativity <b>decreases</b>.</div>
+ <div class="key"><b>Reactivity:</b> halogens act as <b>oxidising agents</b> (gain electrons to form negative ions, or become the δ− end of a polar molecule). The same factors explain why reactivity <b>decreases</b> down the group. Fluorine is extremely reactive.</div></div>`}
+/* T5 */
+const Q=[['Why does bromine have a higher boiling point than chlorine?',['Bromine has stronger covalent bonds','Br₂ has more electrons, so stronger instantaneous dipole–induced dipole forces','Bromine is polar','Bromine atoms are lighter'],1,'Larger electron cloud → stronger London forces → more energy needed to separate molecules.'],
+['What is the state of iodine at room temperature?',['Gas','Liquid','Solid','Plasma'],2,'Iodine melts at 114 °C, so it is a solid at 20 °C.'],
+['Which equation shows iodine sublimation?',['I(s) → I(g)','I₂(s) → I₂(g)','I₂(l) → I₂(g)','2I(s) → I₂(g)'],1,'Use the formula I₂ and state symbols: solid → gas without melting.'],
+['Which equation shows bromine vapour forming?',['Br₂(l) → Br₂(g)','Br(l) → Br(g)','Br₂(s) → Br₂(g)','Br₂(g) → Br₂(l)'],0,'Bromine is a liquid at room temperature.'],
+['Which halogen is the most electronegative?',['Chlorine','Iodine','Fluorine','Bromine'],2,'Fluorine has the highest EN of all elements (4.0).'],
+['What happens to reactivity down Group 7?',['Increases','Decreases','Stays the same','Increases then decreases'],1,'Atoms gain electrons less readily as the pull on them weakens.'],
+['Why is fluorine the most electronegative element?',['It has the most electrons','Its bonding pair is closest to the nucleus with the least shielding','It is a gas','It has the biggest atom'],1,'Fewest energy levels: shortest distance, least shielding.'],
+['Predict astatine (below iodine): its state at room temperature and melting point compared with iodine?',['Gas, lower','Liquid, lower','Solid, higher','Solid, lower'],2,'Trend: m.p. increases down the group. Astatine is a solid with m.p. higher than iodine (302 °C).'],
+['Intermolecular forces between halogen molecules are…',['Hydrogen bonds','Ionic bonds','Instantaneous dipole–induced dipole','Metallic bonds'],2,'Weak London forces between non-polar molecules.']];
+let qi=0,qs=0,qa=null;
+function t5(){if(qi>=Q.length)return `<div class="card"><h2>🏆 Score ${qs} / ${Q.length}</h2><p>${qs>=8?'Excellent!':qs>=6?'Good work – revisit scenes 2 and 4.':'Replay the scenes and try again.'}</p><button class="btn p" onclick="qi=0;qs=0;qa=null;draw()">Try again</button></div>`;
+ const q=Q[qi];return `<div class="card"><h2>Check your understanding</h2><p class="note">Question ${qi+1} of ${Q.length}</p><p><b>${q[0]}</b></p>${q[1].map((o,i)=>`<button class="opt ${qa!=null?(i==q[2]?'good':i==qa?'bad':''):''}" ${qa!=null?'disabled':''} onclick="qa=${i};if(${i}==${q[2]})qs++;draw()">${o}</button>`).join('')}
+ ${qa!=null?`<div class="res ${qa==q[2]?'':'no'}">${qa==q[2]?'Correct! ':'Not quite. '}${q[3]}</div><p><button class="btn p" onclick="qi++;qa=null;draw()">${qi==Q.length-1?'See score':'Next'} ▶</button></p>`:''}</div>`}
+/* T6 */
+let sh=[false,false];
+const EX=[['Why does bromine have a higher boiling temperature than chlorine?','Both exist as diatomic molecules held together by weak instantaneous dipole–induced dipole (London) forces. Br₂ has more electrons (a larger electron cloud) than Cl₂, so these forces are stronger and more energy is needed to overcome them, giving a higher boiling temperature.'],['Why is fluorine the most electronegative element of all?','Fluorine has a small atom with only two energy levels, so the bonding pair of electrons is very close to the nucleus and there is little shielding by inner electrons. Together with its nuclear charge this gives the strongest attraction for a bonding pair of any element (4.0).']];
+function t6(){return `<div class="card"><h2>✍️ Explain it in your own words</h2><p class="note">Write your answer first, then reveal the model answer.</p>${EX.map((e,i)=>`<div class="key"><b>${i+1}. ${e[0]}</b><br><button class="btn" onclick="sh[${i}]=!sh[${i}];draw()">${sh[i]?'Hide':'Show'} model answer</button>${sh[i]?`<div class="res">${e[1]}</div>`:''}</div>`).join('')}</div>`}
+function draw(){simId++;$('#view').innerHTML=[t1,t2,t3,t4,t5,t6][tab]()}
+nav();draw();
+</script></body></html>
